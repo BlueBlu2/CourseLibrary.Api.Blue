@@ -1,4 +1,6 @@
-﻿using CourseLibrary.API.Blue.Entities;
+﻿using AutoMapper;
+using CourseLibrary.Api.Blue.Models;
+using CourseLibrary.API.Blue.Entities;
 using CourseLibrary.API.Blue.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -14,21 +16,23 @@ namespace CourseLibrary.Api.Blue.Controllers
     public class AuthorsController : ControllerBase
     {
         private readonly ICourseLibraryRepository _context;
+        private readonly IMapper _mapper;
 
-        public AuthorsController(ICourseLibraryRepository context)
+        public AuthorsController(ICourseLibraryRepository context, IMapper mapper)
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
+            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
-        [HttpGet]
-        public ActionResult<IEnumerable<Author>> GetAuthors()
+        [HttpGet,HttpHead]
+        public ActionResult<IEnumerable<AuthorDto>> GetAuthors()
         {
-            return Ok(_context.GetAuthors());
+            return Ok(_mapper.Map<IEnumerable<AuthorDto>>(_context.GetAuthors()));
         }
-        [HttpGet("{authorId:guid}")]
-        public ActionResult<Author> GetAuthor(Guid authorId)
+        [HttpGet("{authorId:guid}"),HttpHead("{authorId:guid}")]
+        public ActionResult<AuthorDto> GetAuthor(Guid authorId)
         {
             var author = _context.GetAuthor(authorId);
-            return author != null ? Ok(author) : (ActionResult)NotFound();
+            return author != null ? Ok(_mapper.Map<AuthorDto>(author)) : (ActionResult)NotFound();
         }
     }
 }
