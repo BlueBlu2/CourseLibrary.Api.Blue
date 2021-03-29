@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using CourseLibrary.Api.Blue.Models;
 using CourseLibrary.API.Blue.Entities;
+using CourseLibrary.API.Blue.ResourceParameters;
 using CourseLibrary.API.Blue.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
@@ -24,9 +25,9 @@ namespace CourseLibrary.Api.Blue.Controllers
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
         [HttpGet,HttpHead]
-        public ActionResult<IEnumerable<AuthorDto>> GetAuthors()
+        public ActionResult<IEnumerable<AuthorDto>> GetAuthors([FromQuery]AuthorsResourceParameters authorsResourceParameters)
         {
-            return Ok(_mapper.Map<IEnumerable<AuthorDto>>(_context.GetAuthors()));
+            return Ok(_mapper.Map<IEnumerable<AuthorDto>>(_context.GetAuthors(authorsResourceParameters)));
         }
         [HttpGet("{authorId:guid}"),HttpHead("{authorId:guid}")]
         public ActionResult<AuthorDto> GetAuthor(Guid authorId)
