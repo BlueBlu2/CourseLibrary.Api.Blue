@@ -29,11 +29,27 @@ namespace CourseLibrary.Api.Blue.Controllers
         {
             return Ok(_mapper.Map<IEnumerable<AuthorDto>>(_context.GetAuthors(authorsResourceParameters)));
         }
-        [HttpGet("{authorId:guid}"),HttpHead("{authorId:guid}")]
+        [HttpGet("{authorId:guid}",Name = "GetAuthor"),HttpHead("{authorId:guid}")]
         public ActionResult<AuthorDto> GetAuthor(Guid authorId)
         {
             var author = _context.GetAuthor(authorId);
             return author != null ? Ok(_mapper.Map<AuthorDto>(author)) : (ActionResult)NotFound();
+        }
+        [HttpPost]
+        public ActionResult<AuthorDto> CreateAuthor(AuthorForCreationDto author)
+        {
+            var authorEntity = _mapper.Map<Author>(author);
+            _context.AddAuthor(authorEntity);
+            _context.Save();
+            var authorToReturn = _mapper.Map<AuthorDto>(authorEntity);
+            return CreatedAtRoute("GetAuthor", new { authorId = authorToReturn.Id }, authorToReturn);
+        }
+
+        [HttpOptions]
+        public IActionResult GetAuthorsOptions()
+        {
+            Response.Headers.Add("Allow", "GET,OPTIONS,POST");
+            return Ok();
         }
     }
 }

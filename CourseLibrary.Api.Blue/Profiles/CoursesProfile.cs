@@ -14,6 +14,7 @@ namespace CourseLibrary.Api.Blue.Profiles
         public CoursesProfile()
         {
             CreateMap<Course, CourseDto>().ReverseMap();
+            CreateMap<CourseForCreationDto, Course>();
         }
     }
 }
