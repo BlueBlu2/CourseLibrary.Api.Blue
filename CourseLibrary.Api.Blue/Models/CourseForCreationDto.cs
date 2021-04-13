@@ -8,15 +8,9 @@ using System.Threading.Tasks;
 
 namespace CourseLibrary.Api.Blue.Models
 {
-    [CourseTitleMustBeDifferentFromDescriptionAttribute]
-    public class CourseForCreationDto// : IValidatableObject
+
+    public class CourseForCreationDto : CourseForManipulationDto // : IValidatableObject
     {
-        [Required]
-        [MaxLength(100)]
-        public string Title { get; set; }
-        [MaxLength(1500)]
-        public string Description { get; set; }
-        public Guid AuthorId { get; set; }
 
         //public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         //{
