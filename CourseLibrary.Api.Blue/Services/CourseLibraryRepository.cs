@@ -1,4 +1,5 @@
-﻿using CourseLibrary.API.Blue.DbContexts;
+﻿using CourseLibrary.Api.Blue.Helpers;
+using CourseLibrary.API.Blue.DbContexts;
 using CourseLibrary.API.Blue.Entities;
 using CourseLibrary.API.Blue.ResourceParameters;
 using System;
@@ -122,16 +123,13 @@ namespace CourseLibrary.API.Blue.Services
         {
             return _context.Authors.ToList<Author>();
         }
-        public IEnumerable<Author> GetAuthors(AuthorsResourceParameters authorsResourceParameters)
+        public PageList<Author> GetAuthors(AuthorsResourceParameters authorsResourceParameters)
         {
             if (authorsResourceParameters == null)
             {
                 throw new ArgumentNullException(nameof(authorsResourceParameters));
             }
-            if (string.IsNullOrWhiteSpace(authorsResourceParameters.MainCategory) && string.IsNullOrWhiteSpace(authorsResourceParameters.SearchQuery))
-            {
-                return GetAuthors();
-            }
+
             var collection = _context.Authors as IQueryable<Author>;
             if (!string.IsNullOrWhiteSpace(authorsResourceParameters.MainCategory))
             {
@@ -146,7 +144,7 @@ namespace CourseLibrary.API.Blue.Services
                     || a.LastName.Contains(searchQuery));
             }
 
-            return collection.ToList();
+            return PageList<Author>.Create(collection, authorsResourceParameters.PageNumber, authorsResourceParameters.PageSize);
 
         }
 
