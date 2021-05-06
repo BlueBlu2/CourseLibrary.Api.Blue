@@ -1,3 +1,4 @@
+using CourseLibrary.Api.Blue.Services;
 using CourseLibrary.API.Blue.DbContexts;
 using CourseLibrary.API.Blue.Services;
 using Microsoft.AspNetCore.Builder;
@@ -58,6 +59,7 @@ namespace CourseLibrary.Api.Blue
                     };
                 };
             });
+            services.AddTransient<IPropertyMappingService, PropertyMappingService>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ICourseLibraryRepository, CourseLibraryRepository>();
 
