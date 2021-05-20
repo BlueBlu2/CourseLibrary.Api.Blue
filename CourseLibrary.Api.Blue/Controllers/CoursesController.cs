@@ -28,7 +28,7 @@ namespace CourseLibrary.Api.Blue.Controllers
             _context = context ?? throw new ArgumentNullException(nameof(context));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }    
-        [HttpGet]
+        [HttpGet(Name = "GetCoursesForAuthor")]
         public ActionResult<IEnumerable<CourseDto>> GetCoursesForAuthor(Guid authorId)
         {
             return _context.AuthorExists(authorId) ? Ok(_mapper.Map<IEnumerable<CourseDto>>(_context.GetCourses(authorId))) : (ActionResult)NotFound();
@@ -47,7 +47,7 @@ namespace CourseLibrary.Api.Blue.Controllers
             }
             return Ok(_mapper.Map<CourseDto>(course));
         }
-        [HttpPost]
+        [HttpPost(Name = "CreateCourseForAuthor")]
         public ActionResult<CourseDto> CreateCourseForAuthor(Guid authorId, CourseForCreationDto course)
         {
             if (!_context.AuthorExists(authorId))

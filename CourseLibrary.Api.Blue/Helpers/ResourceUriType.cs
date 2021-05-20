@@ -9,6 +9,7 @@ namespace CourseLibrary.Api.Blue.Helpers
     public enum ResourceUriType
     {
         PreviousPage,
-        NextPage
+        NextPage,
+        Current
     }
 }
