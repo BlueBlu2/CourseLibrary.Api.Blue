@@ -15,9 +15,10 @@ namespace CourseLibrary.Api.Blue.Profiles
         public AuthorsProfile()
         {
             CreateMap<Author, AuthorDto>()
-                .ForMember(d => d.Age, o => o.MapFrom(s => s.DateOfBirth.GetCurrentAge()))
+                .ForMember(d => d.Age, o => o.MapFrom(s => s.DateOfBirth.GetCurrentAge(s.DateOfDeath)))
                 .ForMember(d => d.Name, o => o.MapFrom(s => $"{s.FirstName} {s.LastName}"));
             CreateMap<AuthorForCreationDto, Author>();
+            CreateMap<AuthorForCreationWithDateOfDeathDto, Author>();
         }
     }
 }
