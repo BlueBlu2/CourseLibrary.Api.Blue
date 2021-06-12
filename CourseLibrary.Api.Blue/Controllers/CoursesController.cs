@@ -2,6 +2,7 @@
 using CourseLibrary.Api.Blue.Models;
 using CourseLibrary.API.Blue.Entities;
 using CourseLibrary.API.Blue.Services;
+using Marvin.Cache.Headers;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -18,6 +19,9 @@ namespace CourseLibrary.Api.Blue.Controllers
 {
     [ApiController]
     [Route("api/authors/{authorId}/courses")]
+    //[ResponseCache(CacheProfileName = "240SecondsCacheProfile")]
+    [HttpCacheExpiration(CacheLocation = CacheLocation.Public)]
+    [HttpCacheValidation(MustRevalidate = true)]
     public class CoursesController : ControllerBase
     {
         private readonly ICourseLibraryRepository _context;
@@ -34,6 +38,9 @@ namespace CourseLibrary.Api.Blue.Controllers
             return _context.AuthorExists(authorId) ? Ok(_mapper.Map<IEnumerable<CourseDto>>(_context.GetCourses(authorId))) : (ActionResult)NotFound();
         }
         [HttpGet("{courseId}", Name = "GetCourseForAuthor")]
+        //[ResponseCache(Duration = 120)]
+        [HttpCacheExpiration(CacheLocation = CacheLocation.Public, MaxAge = 1000)]
+        [HttpCacheValidation(MustRevalidate = false)]
         public ActionResult<CourseDto> GetCourseForAuthor(Guid authorId, Guid courseId)
         {
             if (!_context.AuthorExists(authorId))
